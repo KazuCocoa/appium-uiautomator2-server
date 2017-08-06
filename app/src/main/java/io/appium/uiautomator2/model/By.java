@@ -17,6 +17,7 @@ import static io.appium.uiautomator2.model.internal.NativeAndroidBySelector.SELE
 import static io.appium.uiautomator2.model.internal.NativeAndroidBySelector.SELECTOR_ANDROID_UIAUTOMATOR;
 import static io.appium.uiautomator2.model.internal.NativeAndroidBySelector.SELECTOR_CLASS;
 import static io.appium.uiautomator2.model.internal.NativeAndroidBySelector.SELECTOR_NATIVE_ID;
+import static io.appium.uiautomator2.model.internal.NativeAndroidBySelector.SELECTOR_TAG;
 import static io.appium.uiautomator2.model.internal.NativeAndroidBySelector.SELECTOR_XPATH;
 
 /**
@@ -62,6 +63,13 @@ public abstract class By {
             throw new IllegalArgumentException("Cannot find elements when '-android uiautomator'" +
                     " is null.");
         return new ByAndroidUiAutomator(expression);
+    }
+
+    public static By tag(String tagName) {
+        if (tagName == null)
+            throw new IllegalArgumentException("Cannot find elements when '-android uiautomator'" +
+                    " is null.");
+        return new ByTag(tagName);
     }
 
     @Override
@@ -201,6 +209,29 @@ public abstract class By {
         @Override
         public String toString() {
             return "By.AndroidUiAutomator: " + expresion;
+        }
+    }
+
+    public static class ByTag extends By {
+        private final String tagName;
+
+        public ByTag(String tagName) {
+            this.tagName = tagName;
+        }
+
+        @Override
+        public String getElementLocator() {
+            return tagName;
+        }
+
+        @Override
+        public String getElementStrategy() {
+            return SELECTOR_TAG;
+        }
+
+        @Override
+        public String toString() {
+            return "By.tag: " + tagName;
         }
     }
 }

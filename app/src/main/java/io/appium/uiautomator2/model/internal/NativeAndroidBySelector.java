@@ -12,6 +12,7 @@ public class NativeAndroidBySelector {
     public static final String SELECTOR_ACCESSIBILITY_ID = "accessibility id";
     public static final String SELECTOR_CLASS = "class name";
     public static final String SELECTOR_ANDROID_UIAUTOMATOR = "-android uiautomator";
+    public static final String SELECTOR_TAG = "tag";
 
     public By pickFrom(String method, String selector) throws UiAutomator2Exception {
         if (SELECTOR_NATIVE_ID.equals(method)) {
@@ -24,6 +25,8 @@ public class NativeAndroidBySelector {
             return By.className(selector);
         } else if (SELECTOR_ANDROID_UIAUTOMATOR.equals(method)) {
             return By.androidUiAutomator(selector);
+        } else if (SELECTOR_TAG.equals(method)) {
+            return By.tag(selector);
         } else {
             Logger.info("By type for method not found: " + method);
             throw new UiAutomator2Exception("method (by) not found: " + method);

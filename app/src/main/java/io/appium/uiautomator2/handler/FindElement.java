@@ -1,8 +1,10 @@
 package io.appium.uiautomator2.handler;
 
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import org.json.JSONException;
@@ -39,7 +41,6 @@ import io.appium.uiautomator2.utils.UiAutomatorParser;
 
 import static io.appium.uiautomator2.model.internal.CustomUiDevice.getInstance;
 import static io.appium.uiautomator2.utils.Device.getAndroidElement;
-import static io.appium.uiautomator2.utils.Device.getUiDevice;
 
 public class FindElement extends SafeRequestHandler {
 
@@ -153,6 +154,8 @@ public class FindElement extends SafeRequestHandler {
             return getXPathUiObject(by.getElementLocator(), null /* AndroidElement */);
         } else if (by instanceof By.ByAndroidUiAutomator) {
             return getInstance().findObject(findByUiAutomator(by.getElementLocator()));
+        } else if (by instanceof By.ByTag) {
+            return getInstance().findObject(findByTag(by.getElementLocator()));
         }
         String msg = String.format("By locator %s is currently not supported!", by.getClass().getSimpleName());
         throw new UnsupportedOperationException(msg);
@@ -212,5 +215,13 @@ public class FindElement extends SafeRequestHandler {
             Logger.debug("Updated findElement locator strategy: " + locator);
         }
         return locator;
+    }
+
+    public static Object findByTag(String locator) {
+        // TODO: implement find by tags
+        // from selendroid : https://github.com/selendroid/selendroid/blob/master/selendroid-server/src/main/java/io/selendroid/server/model/internal/execute_native/FindElementByAndroidTag.java
+        // https://github.com/selendroid/selendroid/blob/204eb7dbde987b6c377ed4852aa8d52dd38a2804/selendroid-server/src/main/java/io/selendroid/server/model/internal/FindsByTagName.java
+        View view = new View(InstrumentationRegistry.getTargetContext().getApplicationContext());
+        return view.getTag();
     }
 }
