@@ -1,6 +1,10 @@
 package io.appium.uiautomator2.handler;
 
+import android.app.Activity;
 import android.app.Instrumentation;
+import android.graphics.Rect;
+import android.os.Build;
+import android.view.Window;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,11 +36,18 @@ public class GetSystemBars extends SafeRequestHandler {
     }
 
     private int getStatusBarHeight(Instrumentation instrumentation) {
-        int result = 0;
-        int resourceId = instrumentation.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = instrumentation.getContext().getResources().getDimensionPixelSize(resourceId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Rect rectangle = new Rect();
+            Window window = ((Activity) instrumentation.getContext()).getWindow();
+            window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+            return rectangle.top;
+        } else {
+            int result = 0;
+            int resourceId = instrumentation.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                result = instrumentation.getContext().getResources().getDimensionPixelSize(resourceId);
+            }
+            return result;
         }
-        return result;
     }
 }
