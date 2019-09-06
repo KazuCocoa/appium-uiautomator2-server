@@ -37,6 +37,7 @@ public class GetSystemBars extends SafeRequestHandler {
 
     private int getStatusBarHeight(Instrumentation instrumentation) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // https://stackoverflow.com/questions/3407256/height-of-status-bar-in-android/47125610#47125610
             Rect rectangle = new Rect();
             Window window = ((Activity) instrumentation.getContext()).getWindow();
             window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
